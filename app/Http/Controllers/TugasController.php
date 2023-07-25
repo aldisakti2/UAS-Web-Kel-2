@@ -5,30 +5,47 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Booking;
-use App\Models\Pesan; 
+use App\Models\Pesan;
+Use Alert;
+
+
 
 class TugasController extends Controller
 {
     //
-    public function about(){
+    public function about()
+        {
 
-        return view('about');
-    }
+            return view('about');
+        }
 
     public function booking(){
 
-        return view('booking');
-    }
+            return view('booking');
+        }
 
     public function show(){
-        $pesans = Pesan::all();
+            $pesans = Pesan::all();
 
-        return view('index',['pesans'=>$pesans] );
-    }
+            return view('index',['pesans'=>$pesans] );
+        }
 
-    public function store(Request $request)
-    {
-        $request->validate([
+        public function store(Request $request)
+        {
+            //validation
+            $request->validate([
+                'nama'=>'required',
+                'email'=>'required',
+            ]);
+            $task = Booking::create($request->all());
+            return Redirect::route('index')->with('success', 'Data anda telah disimpan');
+
+        }
+        
+
+    public function storew(Request $request)
+        {
+            $request->validate([
             'nama'=>'required',
             'email'=>'required',
         ]);
@@ -37,11 +54,16 @@ class TugasController extends Controller
             'nama'=>$request->nama,
             'email'=>$request->email,
             'tanggal'=>$request->tanggal,
+            'jam'=>$request->jam,
             'jumlah_tamu'=>$request->jumlah_tamu,
-            'pesan'=>$request->pesan,           
+            'pesan'=>$request->pesan         
         ]);
 
-        return view('booking');
+        Redirect::route('index');
+        return  Redirect::route('index');
+    
+
+        
     }
  
     public function store_pesan(Request $request)
